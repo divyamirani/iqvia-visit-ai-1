@@ -3,8 +3,10 @@ import { useState, useEffect, useRef  } from 'react';
 import React from 'react';
 import cors from 'cors';
 //import config from "./firebase/firebase";
+// @ts-ignore
 import {getOpenAIResponse} from './openaiService'
 import './app.css';
+// @ts-ignore
 import { saveChatMessage } from "./chatService";
 //import { queryDatabase, insertRecord} from "./db";
 
@@ -18,14 +20,16 @@ function App() {
 	const [ newInputValue, setNewInputValue] = useState('');
 	const [ messages, setMessages ] = useState<Message[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
-	const chatWindowRef = useRef(null);
-	const [avatar, setAvatar] = useState(null);
-	useEffect(() => {
+	//const chatWindowRef = useRef(null);
+	//const [avatar, setAvatar] = useState(null);
+	//const chatWindowRef = useRef(null);
+    const chatWindowRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
         if (chatWindowRef.current) {
             chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
-        }	
-
-    }, [messages, isLoading]);
+        }
+    }, [messages, isLoading]);  
+ 
 	let isFirstMessage = true;
 	const jsonBody = {
 		action : 'Schedule/Reschedule/Cancel',
@@ -75,7 +79,7 @@ function App() {
 		console.log(users);
 	  }*/
 	
-	const avatarOptions = [
+	/* const avatarOptions = [
 		{ id: 1, src: '/man.png', name: 'Avatar 1' },
 		{ id: 2, src:  '/woman.png', name: 'Avatar 2' },
 		{ id: 3, src:  '/user.png', name: 'Avatar 3' },
@@ -83,7 +87,7 @@ function App() {
 
 	  const handleAvatarSelect = (avatar) => {
 		setAvatar(avatar);
-	  };
+	  };*/
 	
 	return <main>
 		<div className='main-div'>	
@@ -94,21 +98,9 @@ function App() {
 				<div className='chat-window body-div'>
 					{isFirstMessage ? <p className='message ai'>Hi, I am VisitBot AI assistance. How may I assist you today! Select an avatar if you like!</p> : ''}
 					
-					{avatarOptions.map((option) => (
-						<img
-							key={option.id}
-							src={option.src}
-							alt={option.name}
-							style={{ width: 50, height: 50, margin: 10 }}
-							onClick={() => handleAvatarSelect(option)}
-						/>
-						))}
+					
 					{messages.map((message,index) => <p key={index} className={'message '+message.role}>
-						{message.role == 'user'?  <img
-							src={avatar.src}
-							alt={avatar.name}
-							style={{ width: 30, height: 30, marginRight: 10 }}
-						/>: ''}
+						
 						{message.content}
 					</p>)}
 					
